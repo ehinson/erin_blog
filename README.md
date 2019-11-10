@@ -15,3 +15,7 @@ export MAIL_PORT=8025
 ```
 
 `python -m smtpd -n -c DebuggingServer localhost:8025`
+
+## Based on
+
+[The Flask Mega-Tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world)
