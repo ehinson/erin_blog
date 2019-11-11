@@ -6,7 +6,7 @@ from app.models import User, Post
 
 class UserModelCase(unittest.TestCase):
   def setUp(self):
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://erinhinson@localhost:5432/blog'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://erinhinson@localhost:5432/test_blog'
     db.create_all()
 
   def tearDown(self):
