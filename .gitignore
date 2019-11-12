@@ -16,9 +16,11 @@ _mailinglist
 .idea/
 docs/_build/
 venv/
+/logs
 
 # Coverage reports
 htmlcov/
 .coverage
 .coverage.*
 *,cover
+
