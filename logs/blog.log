@@ -1,9 +1,86 @@
-2019-11-10 11:10:24,074 INFO: Blog startup [in /Users/erinhinson/Projects/erin_blog/app/__init__.py:42]
-2019-11-10 11:20:45,107 INFO: Blog startup [in /Users/erinhinson/Projects/erin_blog/app/__init__.py:42]
-2019-11-10 12:58:14,561 INFO: Blog startup [in /Users/erinhinson/Projects/erin_blog/app/__init__.py:42]
-2019-11-10 12:58:27,442 INFO: Blog startup [in /Users/erinhinson/Projects/erin_blog/app/__init__.py:42]
-2019-11-10 15:12:37,321 INFO: Blog startup [in /Users/erinhinson/Projects/erin_blog/app/__init__.py:42]
-2019-11-10 15:13:20,686 INFO: Blog startup [in /Users/erinhinson/Projects/erin_blog/app/__init__.py:42]
-2019-11-10 15:14:40,559 INFO: Blog startup [in /Users/erinhinson/Projects/erin_blog/app/__init__.py:42]
-2019-11-10 15:19:51,465 INFO: Blog startup [in /Users/erinhinson/Projects/erin_blog/app/__init__.py:42]
-2019-11-10 15:21:20,699 INFO: Blog startup [in /Users/erinhinson/Projects/erin_blog/app/__init__.py:42]
+2019-11-11 08:59:14,129 ERROR: Exception on /explore [GET] [in /Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/flask/app.py:1890]
+Traceback (most recent call last):
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/flask/app.py", line 2446, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/flask/app.py", line 1951, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/flask/app.py", line 1820, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/flask/app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/flask/app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/flask_login/utils.py", line 261, in decorated_view
+    return func(*args, **kwargs)
+  File "/Users/erinhinson/Projects/erin_blog/app/routes.py", line 126, in explore
+    return render_template('index.html', title='Explore', posts=posts)
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/flask/templating.py", line 137, in render_template
+    return _render(
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/flask/templating.py", line 120, in _render
+    rv = template.render(context)
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/jinja2/asyncsupport.py", line 76, in render
+    return original_render(self, *args, **kwargs)
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/jinja2/environment.py", line 1008, in render
+    return self.environment.handle_exception(exc_info, True)
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/jinja2/environment.py", line 780, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/jinja2/_compat.py", line 37, in reraise
+    raise value.with_traceback(tb)
+  File "/Users/erinhinson/Projects/erin_blog/app/templates/index.html", line 1, in <module>
+    {% extends "base.html" %}
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/jinja2/environment.py", line 1005, in render
+    return concat(self.root_render_func(self.new_context(vars)))
+  File "/Users/erinhinson/Projects/erin_blog/app/templates/index.html", line 14, in root
+    <p>
+  File "/Users/erinhinson/Projects/erin_blog/app/templates/base.html", line 55, in root
+  File "/Users/erinhinson/Projects/erin_blog/app/templates/index.html", line 26, in block_content
+    {% endblock %}
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/jinja2/environment.py", line 430, in getattr
+    return getattr(obj, attribute)
+jinja2.exceptions.UndefinedError: 'form' is undefined
+2019-11-11 16:35:17,264 ERROR: Exception on /explore [GET] [in /Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/flask/app.py:1890]
+Traceback (most recent call last):
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/flask/app.py", line 2446, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/flask/app.py", line 1951, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/flask/app.py", line 1820, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/flask/app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/flask/app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/flask_login/utils.py", line 261, in decorated_view
+    return func(*args, **kwargs)
+  File "/Users/erinhinson/Projects/erin_blog/app/routes.py", line 126, in explore
+    return render_template('index.html', title='Explore', posts=posts)
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/flask/templating.py", line 137, in render_template
+    return _render(
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/flask/templating.py", line 120, in _render
+    rv = template.render(context)
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/jinja2/asyncsupport.py", line 76, in render
+    return original_render(self, *args, **kwargs)
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/jinja2/environment.py", line 1008, in render
+    return self.environment.handle_exception(exc_info, True)
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/jinja2/environment.py", line 780, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/jinja2/_compat.py", line 37, in reraise
+    raise value.with_traceback(tb)
+  File "/Users/erinhinson/Projects/erin_blog/app/templates/index.html", line 1, in <module>
+    {% extends "base.html" %}
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/jinja2/environment.py", line 1005, in render
+    return concat(self.root_render_func(self.new_context(vars)))
+  File "/Users/erinhinson/Projects/erin_blog/app/templates/index.html", line 14, in root
+    <p>
+  File "/Users/erinhinson/Projects/erin_blog/app/templates/base.html", line 55, in root
+  File "/Users/erinhinson/Projects/erin_blog/app/templates/index.html", line 26, in block_content
+    {% endblock %}
+  File "/Users/erinhinson/Projects/erin_blog/venv/lib/python3.8/site-packages/jinja2/environment.py", line 430, in getattr
+    return getattr(obj, attribute)
+jinja2.exceptions.UndefinedError: 'form' is undefined
+2019-11-12 09:13:34,548 INFO: Blog startup [in /Users/erinhinson/Projects/erin_blog/app/__init__.py:42]
+2019-11-12 17:33:09,794 INFO: Blog startup [in /Users/erinhinson/Projects/erin_blog/app/__init__.py:42]
