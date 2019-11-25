@@ -29,5 +29,9 @@
         {% endif %}
         {% endwith %}
         {% block content %}{% endblock %}
+        {% block scripts %}
+            {{ moment.include_jquery() }}
+            {{ moment.include_moment() }}
+        {% endblock %}
     </body>
 </html>
