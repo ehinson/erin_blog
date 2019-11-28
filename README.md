@@ -19,3 +19,11 @@ export MAIL_PORT=8025
 ## Based on
 
 [The Flask Mega-Tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world)
+
+## To extract PyBabel texts to a file and create a Spanish translation:
+`pybabel extract -F babel.cfg -k _l -o messages.pot .`
+`pybabel init -i messages.pot -d app/translations -l es`
+
+## To update texts in PyBabel:
+`pybabel extract -F babel.cfg -k _l -o messages.pot .`
+`pybabel update -i messages.pot -d app/translations`

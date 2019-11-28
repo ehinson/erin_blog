@@ -1,21 +1,21 @@
 <html>
     <head>
         {% if title %}
-        <title>{{ title }} - microblog</title>
+        <title>{{ title }} - Blog</title>
         {% else %}
-        <title>microblog</title>
+        <title>{{_('Blog')}}</title>
         {% endif %}
     </head>
     <body>
         <div>
-            Microblog:
-            <a href="{{ url_for('index') }}">Home</a>
+            Blog:
+            <a href="{{ url_for('index') }}">{{_('Home')}}</a>
             {% if current_user.is_anonymous %}
-            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('login') }}">{{_('Login')}}</a>
             {% else %}
-            <a href="{{ url_for('user', username=current_user.username) }}">Profile</a>
-            <a href="{{ url_for('explore') }}">Explore</a>
-            <a href="{{ url_for('logout') }}">Logout</a>
+            <a href="{{ url_for('user', username=current_user.username) }}">{{_('Profile')}}</a>
+            <a href="{{ url_for('explore') }}">{{_('Explore')}}</a>
+            <a href="{{ url_for('logout') }}">{{_('Logout')}}</a>
             {% endif %}
           </div>
         <hr>
@@ -32,6 +32,7 @@
         {% block scripts %}
             {{ moment.include_jquery() }}
             {{ moment.include_moment() }}
+            {{ moment.lang(g.locale) }}
         {% endblock %}
     </body>
 </html>

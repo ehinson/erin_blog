@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Hi, {{ current_user.username }}!</h1>
+    <h1>{{ _('Hi, %(username)s!', username=current_user.username) }}</h1>
     {% if form %}
     <form action="" method="post">
         {{ form.hidden_tag() }}
@@ -26,9 +26,9 @@
     <div>{% include '_post.html' %}</div>
     {% endfor %}
     {% if prev_url %}
-    <a href="{{ prev_url }}">Newer posts</a>
+    <a href="{{ prev_url }}">{{_('Newer posts')}}</a>
     {% endif %}
     {% if next_url %}
-    <a href="{{ next_url }}">Older posts</a>
+    <a href="{{ next_url }}">{{_('Older posts')}}</a>
     {% endif %}
 {% endblock %}

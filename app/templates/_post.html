@@ -1,14 +1,17 @@
 <table>
-    <tr valign="top">
-        <td><img src="{{ post.author.avatar(256) }}"></td>
-        <td>
-            {{ post.title }}
-            <a href="{{ url_for('user', username=post.author.username) }}">
-                {{ post.author.username }}
-            </a>
-            said {{ moment(post.timestamp).fromNow() }}:
-            <br>
-            {{ post.body }}
-        </td>
-    </tr>
+  <tr valign="top">
+    <td><img src="{{ post.author.avatar(256) }}" /></td>
+    <td>
+      {{ post.title }}
+      {% set user_link %}
+      <a href="{{ url_for('user', username=post.author.username) }}">
+        {{ post.author.username }}
+      </a>
+      {% endset %}
+      {{ _('%(username)s said %(when)s',
+            username=user_link, when=moment(post.timestamp).fromNow()) }}
+      <br />
+      {{ post.body }}
+    </td>
+  </tr>
 </table>
