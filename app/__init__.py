@@ -16,7 +16,7 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login = LoginManager(app)
-login.login_view = 'login'
+login.login_view = 'auth.login'
 login.login_message = _l('Please log in to access this page.')
 mail = Mail(app)
 moment = Moment(app)
@@ -61,4 +61,4 @@ if not app.debug:
 def getLocale():
   return request.accept_languages.best_match(app.config['LANGUAGES'])
 
-from app import routes, models
+from app import models

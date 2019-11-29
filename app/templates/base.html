@@ -9,13 +9,13 @@
     <body>
         <div>
             Blog:
-            <a href="{{ url_for('index') }}">{{_('Home')}}</a>
+            <a href="{{ url_for('main.index') }}">{{_('Home')}}</a>
             {% if current_user.is_anonymous %}
-            <a href="{{ url_for('login') }}">{{_('Login')}}</a>
+            <a href="{{ url_for('auth.login') }}">{{_('Login')}}</a>
             {% else %}
-            <a href="{{ url_for('user', username=current_user.username) }}">{{_('Profile')}}</a>
-            <a href="{{ url_for('explore') }}">{{_('Explore')}}</a>
-            <a href="{{ url_for('logout') }}">{{_('Logout')}}</a>
+            <a href="{{ url_for('main.user', username=current_user.username) }}">{{_('Profile')}}</a>
+            <a href="{{ url_for('main.explore') }}">{{_('Explore')}}</a>
+            <a href="{{ url_for('auth.logout') }}">{{_('Logout')}}</a>
             {% endif %}
           </div>
         <hr>
