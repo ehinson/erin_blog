@@ -4,6 +4,10 @@
 
 `flask run`
 
+## Be sure to start Postgres:
+
+ `pg_ctl -D /usr/local/var/postgres start`
+
 [SQLAlchemy documentation](https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.SQLAlchemy)
 
 ## To run a local SMTP server
