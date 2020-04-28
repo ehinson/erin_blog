@@ -16,7 +16,7 @@ _mailinglist
 .idea/
 docs/_build/
 venv/
-/logs
+logs/
 
 # Coverage reports
 htmlcov/
@@ -27,4 +27,3 @@ htmlcov/
 messages.pot
 messages.mo
 
-/logs/*
