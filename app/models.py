@@ -5,6 +5,7 @@ from flask import current_app
 from app import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from app.search import add_to_index, remove_from_index, query_index
 
 
 followers = db.Table('followers',
@@ -72,6 +73,7 @@ class User(UserMixin, db.Model):
     return User.query.get(id)
 
 class Post(db.Model):
+  __searchable__ = ['body']
   id = db.Column(db.Integer, primary_key=True)
   title =  db.Column(db.String(120))
   body =  db.Column(db.Text)

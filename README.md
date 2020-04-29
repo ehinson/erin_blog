@@ -4,11 +4,28 @@
 
 `flask run`
 
-## Be sure to start Postgres:
+## Be sure to start Postgres
 
  `pg_ctl -D /usr/local/var/postgres start`
 
 [SQLAlchemy documentation](https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.SQLAlchemy)
+[Elasticsearch documentation](https://elasticsearch-py.readthedocs.io/en/master/)
+
+## To start the shell with the application context:
+
+`flask shell`
+
+## To start the shell with the "python" command, you will need to import the current_app
+
+If you see the dreaded "RuntimeError: Working outside of application context." error:
+
+```python
+>>> from app import create_app
+>>> app = create_app()
+>>> app.app_context().push()
+>>> current_app.config['SQLALCHEMY_DATABASE_URI']
+'sqlite:////your/cool/uri'
+```
 
 ## To run a local SMTP server
 
