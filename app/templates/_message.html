@@ -1,0 +1,16 @@
+<table>
+  <tr valign="top">
+    <td><img src="{{ message.author.avatar(256) }}" /></td>
+    <td>
+      {% set user_link %}
+      <a href="{{ url_for('main.user', username=message.author.username) }}">
+        {{ message.author.username }}
+      </a>
+      {% endset %}
+      {{ _('%(username)s said %(when)s',
+            username=user_link, when=moment(message.timestamp).fromNow()) }}
+      <br />
+      <p>{{ message.body }}</p>
+    </td>
+  </tr>
+</table>
