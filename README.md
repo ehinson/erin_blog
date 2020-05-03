@@ -20,6 +20,16 @@
 
 `flask shell`
 
+## Running migrations
+
+Generate a new migration
+
+`flask db migrate -m "migration message"`
+
+Apply it to the database
+
+`flask db upgrade`
+
 ## To start the shell with the "python" command, you will need to import the current_app
 
 If you see the dreaded "RuntimeError: Working outside of application context." error:
