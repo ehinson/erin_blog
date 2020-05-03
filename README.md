@@ -59,5 +59,7 @@ export MAIL_PORT=8025
 ## Internationalization
 
 `flask translate init LANG` to add a new language
+
 `flask translate update` to update all the languages after making changes to the _() and _l() language markers
+
 `flask translate compile` to compile all languages after updating the translation files
