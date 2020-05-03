@@ -4,17 +4,23 @@
 
 `flask run`
 
-## Be sure to start Postgres
+## Be sure to start Postgres!
 
  `pg_ctl -D /usr/local/var/postgres start`
 
-## Be sure to start Elasticsearch
+## Be sure to start Elasticsearch!
 
  `elasticsearch`
+
+## Be sure to start Redis Server!
+
+ `redis-server /usr/local/etc/redis.conf`
 
 [SQLAlchemy documentation](https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.SQLAlchemy)
 
 [Elasticsearch documentation](https://elasticsearch-py.readthedocs.io/en/master/)
+
+[Redis documentation](http://redis.io)
 
 ## To start the shell with the application context
 
