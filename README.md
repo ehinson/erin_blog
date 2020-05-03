@@ -8,10 +8,15 @@
 
  `pg_ctl -D /usr/local/var/postgres start`
 
+## Be sure to start Elasticsearch
+
+ `elasticsearch`
+
 [SQLAlchemy documentation](https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.SQLAlchemy)
+
 [Elasticsearch documentation](https://elasticsearch-py.readthedocs.io/en/master/)
 
-## To start the shell with the application context:
+## To start the shell with the application context
 
 `flask shell`
 
@@ -41,7 +46,8 @@ export MAIL_PORT=8025
 
 [The Flask Mega-Tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world)
 
-## Internationalization:
+## Internationalization
+
 `flask translate init LANG` to add a new language
 `flask translate update` to update all the languages after making changes to the _() and _l() language markers
 `flask translate compile` to compile all languages after updating the translation files

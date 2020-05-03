@@ -1,38 +1,42 @@
 <html>
-    <head>
-        {% if title %}
-        <title>{{ title }} - Blog</title>
+
+<head>
+    {% if title %}
+    <title>{{ title }} - Blog</title>
+    {% else %}
+    <title>{{_('Blog')}}</title>
+    {% endif %}
+</head>
+
+<body>
+    <div>
+        Blog:
+        <a href="{{ url_for('main.index') }}">{{_('Home')}}</a>
+        {% if current_user.is_anonymous %}
+        <a href="{{ url_for('auth.login') }}">{{_('Login')}}</a>
         {% else %}
-        <title>{{_('Blog')}}</title>
+        <a href="{{ url_for('main.user', username=current_user.username) }}">{{_('Profile')}}</a>
+        <a href="{{ url_for('main.explore') }}">{{_('Explore')}}</a>
+        <a href="{{ url_for('auth.logout') }}">{{_('Logout')}}</a>
         {% endif %}
-    </head>
-    <body>
+    </div>
+    {% if g.search_form %}
+    <form method="get" action="{{ url_for('main.search') }}">
         <div>
-            Blog:
-            <a href="{{ url_for('main.index') }}">{{_('Home')}}</a>
-            {% if current_user.is_anonymous %}
-            <a href="{{ url_for('auth.login') }}">{{_('Login')}}</a>
-            {% else %}
-            <a href="{{ url_for('main.user', username=current_user.username) }}">{{_('Profile')}}</a>
-            <a href="{{ url_for('main.explore') }}">{{_('Explore')}}</a>
-            <a href="{{ url_for('auth.logout') }}">{{_('Logout')}}</a>
-            {% endif %}
-          </div>
-        <hr>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}
-        {% block content %}{% endblock %}
-        {% block scripts %}
-            {{ moment.include_jquery() }}
-            {{ moment.include_moment() }}
-            {{ moment.lang(g.locale) }}
-        {% endblock %}
-    </body>
+            {{ g.search_form.q(size=20, placeholder=g.search_form.q.label.text) }}
+        </div>
+    </form>
+    {% endif %}
+    <hr />
+    {% with messages = get_flashed_messages() %} {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %} {% endwith %} {% block content %}{% endblock %} {% block scripts
+    %} {{ moment.include_jquery() }} {{ moment.include_moment() }} {{
+    moment.lang(g.locale) }} {% endblock %}
+</body>
+
 </html>
