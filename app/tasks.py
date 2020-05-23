@@ -1,7 +1,9 @@
 import time
+import sys
 from rq import get_current_job
 from app import create_app, db
-from app.models import Task
+from app.models import Task, User, Post
+from app.email import send_email
 
 
 # Because this is going to run in a separate process,
@@ -35,3 +37,37 @@ def _set_task_progress(progress):
         # I needed to be very careful in how I designed the parent task (add_notification) to not make any database changes,
         # since this commit call would write those as well
         db.session.commit()
+
+def export_posts(user_id):
+    try:
+        # read user posts from database
+        # send email with data to user
+        user = User.query.get(user_id)
+        _set_task_progress(0)
+        data = []
+        i = 0
+        total_posts = user.posts.count()
+        for post in user.posts.order_by(Post.timestamp.asc()):
+            data.append({
+                'body': post.body,
+                'timestamp': post.timestamp.isoformat() + 'Z'
+            })
+            time.sleep(5)
+            i+=1
+            # ???
+            _set_task_progress(i / 100)
+
+        send_email('[Microblog] Your blog posts',
+                sender=app.config['ADMINS'][0], recipients=[user.email],
+                text_body=render_template('email/export_posts.txt', user=user),
+                html_body=render_template('email/export_posts.html', user=user),
+                attachments=[('posts.json', 'application/json',
+                              json.dumps({'posts': data}, indent=4))],
+                sync=True)
+    except:
+        # handle unexpected errors
+        # errors to be sent out to the administrator email address (configured in Flask)
+        app.logger.error('Unhandled exception', exc_info=sys.exc_info())
+    finally:
+        # handle clean up
+        _set_task_progress(100)
