@@ -94,7 +94,17 @@ redis-server /usr/local/etc/redis.conf
 
 ## Running [migrations](https://flask-migrate.readthedocs.io/en/latest/)
 
-Create an .env.py file from the example in the migrations folder
+Create an `env.py` file from the example in the migrations folder
+
+If `flask db migrate` fails, try to delete the latest migration file ( a python file) then try to perform a migration afresh.
+
+If issue still persists try these commands :
+
+```bash
+flask db stamp head  # To set the revision in the database to the head, without performing any migrations. You can change head to the required change you want.
+flask db migrate     # To detect automatically all the changes.
+flask db upgrade     # To apply all the changes.
+```
 
 Generate a new migration
 
