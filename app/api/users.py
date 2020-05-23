@@ -3,7 +3,7 @@ from app import db
 from app.models import User
 from app.api import bp
 from app.api.errors import bad_request
-
+from app.api.auth import token_auth
 
 @bp.route('/users/<int:id>', methods=['GET'])
 @token_auth.login_required
