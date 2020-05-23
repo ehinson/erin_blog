@@ -1,6 +1,24 @@
 # To start
 
+## Install Python 3 and dependencies
+
+```bash
+brew install python
+
+OR
+
+brew update
+brew upgrade python3
+
+```
+
+## Run the project
+
+`virtualenv venv`
+
 `source venv/bin/activate`
+
+`pip install -r requirements.txt`
 
 `flask run`
 
@@ -8,13 +26,36 @@
 
  `pg_ctl -D /usr/local/var/postgres start`
 
-## Be sure to start Elasticsearch!
+## Be sure to [install](https://www.elastic.co/guide/en/elasticsearch/reference/7.7/brew.html) and start Elasticsearch!
 
- `elasticsearch`
+`brew tap elastic/tap`
+
+`brew install elastic/tap/elasticsearch-full`
+
+`elasticsearch`
 
 ## Be sure to start Redis Server!
 
- `redis-server /usr/local/etc/redis.conf`
+`brew update`
+
+`brew install redis`
+
+To have launchd start redis now and restart at login:
+```
+brew services start redis
+```
+
+to stop it, just run:
+
+```
+brew services stop redis
+```
+
+Or, if you don't want/need a background service you can just run:
+
+```
+redis-server /usr/local/etc/redis.conf
+```
 
 [SQLAlchemy documentation](https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/#flask_sqlalchemy.SQLAlchemy)
 
