@@ -40,29 +40,30 @@
             <li>{{ message }}</li>
             {% endfor %}
         </ul>
-        {% endif %} {% endwith %}    {% block content %}
+        {% endif %} {% endwith %}
         <div class="container">
             {% if current_user.is_authenticated %}
             {% with tasks = current_user.get_tasks_in_progress() %}
             {% if tasks %}
             {% for task in tasks %}
-            <label for="file">{{ task.description }}</label>
-            <progress id="file" value="{{ task.get_progress() }}" max="100"> <span
-                    id="{{ task.id }}-progress">{{ task.get_progress() }}</span>%</progress>
+            <label for="file">{{task.description}}</label>
+            <span
+                    id="{{ task.id }}-progress">{{ task.get_progress()  * 100}}</span>%
+            <progress id="file" value="0" max="100"> </progress>
             {% endfor %}
             {% endif %}
             {% endwith %}
             {% endif %}
+            {% block content%} {% endblock%}
             </div>
-            {% endblock %}
         {% block scripts%}
         {{ moment.include_jquery() }}
         {{ moment.include_moment() }}
         {{moment.lang(g.locale) }}
         <script>
             function set_task_progress(task_id, progress) {
-            // $('#' + task_id + '-progress').text(progress);
-            return progress
+            document.getElementById('#' + task_id + '-progress').innerText = progress * 100
+            document.getElementById("file").value = progress * 100
         }
             function set_message_count(n) {
                 $('#message_count').text(n);
