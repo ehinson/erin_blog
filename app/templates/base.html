@@ -9,64 +9,91 @@
 </head>
 
 <body>
-    <div>
-        Blog:
-        <a href="{{ url_for('main.index') }}">{{_('Home')}}</a>
-        {% if current_user.is_anonymous %}
-        <a href="{{ url_for('auth.login') }}">{{_('Login')}}</a>
-        {% else %}
-        <a href="{{ url_for('main.user', username=current_user.username) }}">{{_('Profile')}}</a>
-        <a href="{{ url_for('main.messages') }}">
-            {{ _('Messages') }}
-            <span id="message_count" style="visibility: {% if new_messages %}visible {% else %}hidden{% endif %};">
-                {{ new_messages }}
-            </span>
-        </a>
-        <a href="{{ url_for('main.explore') }}">{{_('Explore')}}</a>
-        <a href="{{ url_for('auth.logout') }}">{{_('Logout')}}</a>
-        {% endif %}
-    </div>
-    {% if g.search_form %}
-    <form method="get" action="{{ url_for('main.search') }}">
         <div>
-            {{ g.search_form.q(size=20, placeholder=g.search_form.q.label.text) }}
+            Blog:
+            <a href="{{ url_for('main.index') }}">{{_('Home')}}</a>
+            {% if current_user.is_anonymous %}
+            <a href="{{ url_for('auth.login') }}">{{_('Login')}}</a>
+            {% else %}
+            <a href="{{ url_for('main.user', username=current_user.username) }}">{{_('Profile')}}</a>
+            <a href="{{ url_for('main.messages') }}">
+                {{ _('Messages') }}
+                <span id="message_count" style="visibility: {% if new_messages %}visible {% else %}hidden{% endif %};">
+                    {{ new_messages }}
+                </span>
+            </a>
+            <a href="{{ url_for('main.explore') }}">{{_('Explore')}}</a>
+            <a href="{{ url_for('auth.logout') }}">{{_('Logout')}}</a>
+            {% endif %}
         </div>
-    </form>
-    {% endif %}
-    <hr />
-    {% with messages = get_flashed_messages() %} {% if messages %}
-    <ul>
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %} {% endwith %} {% block content %}{% endblock %}
-    {% block scripts%}
-    {{ moment.include_jquery() }}
-    {{ moment.include_moment() }}
-    {{moment.lang(g.locale) }}
-    <script>
-        function set_message_count(n) {
-            $('#message_count').text(n);
-            $('#message_count').css('visibility', n ? 'visible' : 'hidden');
+        {% if g.search_form %}
+        <form method="get" action="{{ url_for('main.search') }}">
+            <div>
+                {{ g.search_form.q(size=20, placeholder=g.search_form.q.label.text) }}
+            </div>
+        </form>
+        {% endif %}
+        <hr />
+        {% with messages = get_flashed_messages() %} {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %} {% endwith %}    {% block content %}
+        <div class="container">
+            {% if current_user.is_authenticated %}
+            {% with tasks = current_user.get_tasks_in_progress() %}
+            {% if tasks %}
+            {% for task in tasks %}
+            <label for="file">{{ task.description }}</label>
+            <progress id="file" value="{{ task.get_progress() }}" max="100"> <span
+                    id="{{ task.id }}-progress">{{ task.get_progress() }}</span>%</progress>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            {% endif %}
+            </div>
+            {% endblock %}
+        {% block scripts%}
+        {{ moment.include_jquery() }}
+        {{ moment.include_moment() }}
+        {{moment.lang(g.locale) }}
+        <script>
+            function set_task_progress(task_id, progress) {
+            // $('#' + task_id + '-progress').text(progress);
+            return progress
         }
-        {% if current_user.is_authenticated %}
-        $(function () {
-            var since = 0;
-            setInterval(function () {
-                $.ajax('{{ url_for('main.notifications') }}?since=' + since).done(
-                    function (notifications) {
-                        for (var i = 0; i < notifications.length; i++) {
-                            set_message_count(notifications[i].data);
+            function set_message_count(n) {
+                $('#message_count').text(n);
+                $('#message_count').css('visibility', n ? 'visible' : 'hidden');
+            }
+            {% if current_user.is_authenticated %}
+            $(function () {
+                var since = 0;
+                setInterval(function () {
+                    $.ajax('{{ url_for('main.notifications') }}?since=' + since).done(
+                        function (notifications) {
+                            for (var i = 0; i < notifications.length; i++) {
+                            switch (notifications[i].name) {
+                                case 'unread_message_count':
+                                    set_message_count(notifications[i].data);
+                                    break;
+                                case 'task_progress':
+                                    set_task_progress(
+                                        notifications[i].data.task_id,
+                                        notifications[i].data.progress);
+                                    break;
+                            }
                             since = notifications[i].timestamp;
                         }
-                    }
-                );
-            }, 10000);
-        });
-        {% endif %}
-    </script>
-    {% endblock %}
+                        }
+                    );
+                }, 10000);
+            });
+            {% endif %}
+        </script>
+        {% endblock %}
 </body>
 
 </html>

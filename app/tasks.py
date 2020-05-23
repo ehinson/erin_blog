@@ -55,7 +55,7 @@ def export_posts(user_id):
             time.sleep(5)
             i+=1
             # ???
-            _set_task_progress(i / 100)
+            _set_task_progress(i / total_posts)
 
         send_email('[Microblog] Your blog posts',
                 sender=app.config['ADMINS'][0], recipients=[user.email],
