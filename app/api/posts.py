@@ -32,6 +32,7 @@ def create_post():
     if 'title' not in data or 'body' not in data:
         return bad_request('must include title and body fields')
     post = Post()
+    post.user_id = token_auth.current_user().id
     post.from_dict(data)
     db.session.add(post)
     db.session.commit()
