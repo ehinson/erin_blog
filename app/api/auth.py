@@ -1,6 +1,10 @@
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
+from flask import jsonify, request, url_for, abort
+from app import db
+from app.api import bp
 from app.models import User
 from app.api.errors import error_response
+from app.auth.email import send_password_reset_email
 
 basic_auth = HTTPBasicAuth()
 token_auth = HTTPTokenAuth()
@@ -27,3 +31,20 @@ def verify_token(token):
 @token_auth.error_handler
 def token_auth_error(status):
     return error_response(status)
+
+@bp.route('/reset_password_request', methods=['GET', 'POST'])
+def reset_password_request():
+    data = request.get_json() or {}
+    user = User.query.filter_by(email=data['email']).first()
+    if user:
+        send_password_reset_email(user)
+
+@bp.route('/reset_password/<token>', methods=['GET', 'POST'])
+@basic_auth.login_required
+def reset_password(token):
+    user = User.verify_reset_password_token(token)
+    if not user:
+        abort(403)
+    data = request.get_json() or {}
+    user.set_password(data['password'])
+    db.session.commit()
