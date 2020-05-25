@@ -276,6 +276,7 @@ class Post(PaginatedAPIMixin, SearchableMixin, db.Model):
             'timestamp': self.timestamp.isoformat() + 'Z',
             'body': self.body,
             'author_id': self.user_id,
+            'author': self.author.to_dict(),
             '_links': {
                 'self': url_for('api.get_post', id=self.id),
             }
