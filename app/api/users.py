@@ -19,7 +19,6 @@ def get_users():
     return jsonify(data)
 
 @bp.route('/users/<int:id>/followers', methods=['GET'])
-@token_auth.login_required
 def get_followers(id):
     user = User.query.get_or_404(id)
     page = request.args.get('page', 1, type=int)
@@ -29,7 +28,6 @@ def get_followers(id):
     return jsonify(data)
 
 @bp.route('/users/<int:id>/posts', methods=['GET'])
-@token_auth.login_required
 def get_user_posts(id):
     user = User.query.get_or_404(id)
     page = request.args.get('page', 1, type=int)
@@ -39,7 +37,6 @@ def get_user_posts(id):
     return jsonify(data)
 
 @bp.route('/users/<int:id>/followed', methods=['GET'])
-@token_auth.login_required
 def get_followed(id):
     user = User.query.get_or_404(id)
     page = request.args.get('page', 1, type=int)
