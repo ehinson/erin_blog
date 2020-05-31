@@ -5,10 +5,13 @@ from app.api import bp
 from app.api.errors import bad_request
 from app.api.auth import token_auth
 
+
 @bp.route('/users/<int:id>', methods=['GET'])
 @token_auth.login_required
 def get_user(id):
-    return jsonify(User.query.get_or_404(id).to_dict())
+    user = User.query.get_or_404(id)
+    return jsonify(user.to_dict(token_auth.current_user()))
+
 
 @bp.route('/users', methods=['GET'])
 @token_auth.login_required
@@ -17,6 +20,7 @@ def get_users():
     per_page = min(request.args.get('per_page', 10, type=int), 100)
     data = User.to_collection_dict(User.query, page, per_page, 'api.get_users')
     return jsonify(data)
+
 
 @bp.route('/users/<int:id>/followers', methods=['GET'])
 def get_followers(id):
@@ -27,6 +31,7 @@ def get_followers(id):
                                    'api.get_followers', id=id)
     return jsonify(data)
 
+
 @bp.route('/users/<int:id>/posts', methods=['GET'])
 def get_user_posts(id):
     user = User.query.get_or_404(id)
@@ -36,6 +41,7 @@ def get_user_posts(id):
                                    'api.get_user_posts', id=id)
     return jsonify(data)
 
+
 @bp.route('/users/<int:id>/followed', methods=['GET'])
 def get_followed(id):
     user = User.query.get_or_404(id)
@@ -44,6 +50,7 @@ def get_followed(id):
     data = User.to_collection_dict(user.followed, page, per_page,
                                    'api.get_followed', id=id)
     return jsonify(data)
+
 
 @bp.route('/users', methods=['POST'])
 def create_user():
@@ -58,10 +65,11 @@ def create_user():
     user.from_dict(data, new_user=True)
     db.session.add(user)
     db.session.commit()
-    response = jsonify(user.to_dict())
+    response = jsonify(user.to_dict(current_user=None))
     response.status_code = 201
     response.headers['Location'] = url_for('api.get_user', id=user.id)
     return response
+
 
 @bp.route('/users/<int:id>', methods=['PUT'])
 @token_auth.login_required
@@ -78,4 +86,32 @@ def update_user(id):
         return bad_request('please use a different email address')
     user.from_dict(data, new_user=False)
     db.session.commit()
-    return jsonify(user.to_dict())
+    return jsonify(user.to_dict(token_auth.current_user()))
+
+
+@bp.route('/follow/<int:id>', methods=['POST'])
+@token_auth.login_required
+def follow(id):
+    user = User.query.get_or_404(id)
+    if user is None:
+        return bad_request('User does not exist')
+    if user == token_auth.current_user():
+        return bad_request('You cannot follow yourself')
+    token_auth.current_user().follow(user)
+
+    db.session.commit()
+    return jsonify(user.to_dict(token_auth.current_user()))
+
+
+@bp.route('/unfollow/<int:id>', methods=['POST'])
+@token_auth.login_required
+def unfollow(id):
+    user = User.query.get_or_404(id)
+    if user is None:
+        return bad_request('User does not exist')
+    if user == token_auth.current_user():
+        return bad_request('You cannot unfollow yourself')
+
+    token_auth.current_user().unfollow(user)
+    db.session.commit()
+    return jsonify(user.to_dict(token_auth.current_user()))

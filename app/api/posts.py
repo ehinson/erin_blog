@@ -23,7 +23,7 @@ def update_post(id):
     data = request.get_json() or {}
     post.from_dict(data)
     db.session.commit()
-    return jsonify(post.to_dict())
+    return jsonify(post.to_dict(token_auth.current_user()))
 
 @bp.route('/posts', methods=['POST'])
 @token_auth.login_required
@@ -36,7 +36,7 @@ def create_post():
     post.from_dict(data)
     db.session.add(post)
     db.session.commit()
-    response = jsonify(post.to_dict())
+    response = jsonify(post.to_dict(token_auth.current_user()))
     response.status_code = 201
     response.headers['Location'] = url_for('api.get_post', id=post.id)
     return response

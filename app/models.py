@@ -150,6 +150,9 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
     def is_following(self, user):
         return self.followed.filter(followers.c.followed_id == user.id).count() > 0
 
+    def is_followed(self, user):
+        return user.followed.filter(followers.c.followed_id == self.id).count() > 0
+
     def followed_posts(self):
         followed = Post.query.join(
             followers, (followers.c.followed_id == Post.user_id)).filter(
@@ -204,7 +207,7 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
         if new_user and 'password' in data:
             self.set_password(data['password'])
 
-    def to_dict(self, include_email=False):
+    def to_dict(self, current_user=None, include_email=False):
         data = {
             'id': self.id,
             'username': self.username,
@@ -220,6 +223,10 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
                 'avatar': self.avatar(128)
             }
         }
+
+        if current_user:
+            data['is_followed'] = current_user.is_following(self)
+            data['is_following'] = self.is_following(current_user)
         if include_email:
             data['email'] = self.email
         return data
@@ -269,14 +276,14 @@ class Post(PaginatedAPIMixin, SearchableMixin, db.Model):
             if field in data:
                 setattr(self, field, data[field])
 
-    def to_dict(self):
+    def to_dict(self, current_user=None):
         data = {
             'id': self.id,
             'title': self.title,
             'timestamp': self.timestamp.isoformat() + 'Z',
             'body': self.body,
             'author_id': self.user_id,
-            'author': self.author.to_dict(),
+            'author': self.author.to_dict(current_user),
             '_links': {
                 'self': url_for('api.get_post', id=self.id),
             }
