@@ -53,7 +53,7 @@ def create_app(config_class=Config):
 
     @app.route("/")
     @app.route("/<path:path>")
-    def index(path):
+    def index(path=None):
         print(path, "hi")
         return render_template("index.html")
 

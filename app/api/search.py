@@ -1,15 +1,18 @@
+from flask import jsonify, request, url_for, abort, current_app
+from app import db
+from app.models import User, Post
+from app.api import bp
+from app.api.errors import bad_request
+from app.api.auth import token_auth
+
+
 @bp.route('/search', methods=['GET'])
 @token_auth.login_required
 def search():
-    # if the form is empty redirect to /explore
-    if not g.search_form.validate():
-        return redirect(url_for(main.explore))
+    data = request.args.get('q')
     page = request.args.get('page', 1, type=int)
-    posts, total = Post.search(g.search_form.q.data, page,
-                               current_app.config['POSTS_PER_PAGE'])
-    next_url = url_for('main.search', q=g.search_form.q.data, page=page + 1) \
-        if total > page * current_app.config['POSTS_PER_PAGE'] else None
-    prev_url = url_for('main.search', q=g.search_form.q.data, page=page - 1) \
-        if page > 1 else None
-    return render_template('search.html', title=_('Search'), posts=posts,
-                           next_url=next_url, prev_url=prev_url)
+    print(data)
+    posts, total = Post.search(data, page, 20)
+    data = User.to_collection_dict(posts, page, 20, 'api.search')
+    return jsonify(data)
+

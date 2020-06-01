@@ -16,7 +16,7 @@ import rq
 class SearchableMixin(object):
     @classmethod
     def search(cls, expression, page, per_page):
-        index = f'{cls.__tablename__}s'
+        index = f'{cls.__tablename__}'
         ids, total = query_index(index, expression, page, per_page)
         if total == 0:
             return cls.query.filter_by(id=0), 0
@@ -34,8 +34,9 @@ class SearchableMixin(object):
         when = []
         for i in range(len(ids)):
             when.append((ids[i], i))
-        return cls.query.filter(cls.id.in_(ids)).order_by(
-            db.case(when, value=cls.id)), total
+        found = cls.query.filter(cls.id.in_(ids)).order_by(
+            db.case(when, value=cls.id))
+        return found, total
 
     @classmethod
     def before_commit(cls, session):
