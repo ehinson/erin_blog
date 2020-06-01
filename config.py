@@ -20,4 +20,4 @@ class Config(object):
     LANGUAGES = ['en', 'es']
     ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL')
     REDIS_URL = os.environ.get('REDIS_URL') or 'redis://'
-    IMAGE_UPLOADS = os.path.join(basedir, 'client/src/images')
+    IMAGE_UPLOADS = os.path.join(basedir, 'static/images')
