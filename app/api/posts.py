@@ -1,9 +1,10 @@
 from flask import jsonify, request, url_for
-from app import db
+from app import db, current_app
 from app.models import Post
 from app.api import bp
 from app.api.errors import bad_request
 from app.api.auth import token_auth
+import os
 
 @bp.route('/posts/<int:id>', methods=['GET'])
 def get_post(id):
@@ -28,7 +29,10 @@ def update_post(id):
 @bp.route('/posts', methods=['POST'])
 @token_auth.login_required
 def create_post():
-    data = request.get_json() or {}
+    data = request.form.to_dict() or {}
+    if request.files:
+      image = request.files["file"]
+      image.save(os.path.join(current_app.config["IMAGE_UPLOADS"], image.filename)) 
     if 'title' not in data or 'body' not in data:
         return bad_request('must include title and body fields')
     post = Post()

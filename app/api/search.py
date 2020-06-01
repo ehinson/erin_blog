@@ -11,7 +11,15 @@ from app.api.auth import token_auth
 def search():
     data = request.args.get('q')
     page = request.args.get('page', 1, type=int)
-    print(data)
+    posts, total = Post.search(data, page, 20)
+    data = User.to_collection_dict(posts, page, 20, 'api.search')
+    return jsonify(data)
+
+@bp.route('/explore', methods=['GET'])
+@token_auth.login_required
+def explore():
+    data = request.args.get('q')
+    page = request.args.get('page', 1, type=int)
     posts, total = Post.search(data, page, 20)
     data = User.to_collection_dict(posts, page, 20, 'api.search')
     return jsonify(data)

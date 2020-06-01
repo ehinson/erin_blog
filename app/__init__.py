@@ -54,7 +54,6 @@ def create_app(config_class=Config):
     @app.route("/")
     @app.route("/<path:path>")
     def index(path=None):
-        print(path, "hi")
         return render_template("index.html")
 
     if not app.debug and not app.testing:
