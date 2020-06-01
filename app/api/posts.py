@@ -21,7 +21,7 @@ def get_posts():
 @token_auth.login_required
 def update_post(id):
     post = Post.query.get_or_404(id)
-    data = request.get_json() or {}
+    data = request.form.to_dict() or {}
     post.from_dict(data)
     db.session.commit()
     return jsonify(post.to_dict(token_auth.current_user()))
@@ -37,6 +37,7 @@ def create_post():
         return bad_request('must include title and body fields')
     post = Post()
     post.user_id = token_auth.current_user().id
+    post.image_url = image.filename
     post.from_dict(data)
     db.session.add(post)
     db.session.commit()

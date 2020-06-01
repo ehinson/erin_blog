@@ -268,12 +268,13 @@ class Post(PaginatedAPIMixin, SearchableMixin, db.Model):
     body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    image_url = db.Column(db.String(240))
 
     def __repr__(self):
         return '<Post {}>'.format(self.body)
 
     def from_dict(self, data):
-        for field in ['title', 'body', "user_id"]:
+        for field in ['title', 'body', "user_id", "image_url"]:
             if field in data:
                 setattr(self, field, data[field])
 
@@ -285,6 +286,7 @@ class Post(PaginatedAPIMixin, SearchableMixin, db.Model):
             'body': self.body,
             'author_id': self.user_id,
             'author': self.author.to_dict(current_user),
+            'image': self.image_url,
             '_links': {
                 'self': url_for('api.get_post', id=self.id),
             }
