@@ -6,9 +6,11 @@ from app.api.errors import bad_request
 from app.api.auth import token_auth
 import os
 
+
 @bp.route('/posts/<int:id>', methods=['GET'])
 def get_post(id):
     return jsonify(Post.query.get_or_404(id).to_dict())
+
 
 @bp.route('/posts', methods=['GET'])
 def get_posts():
@@ -17,22 +19,33 @@ def get_posts():
     data = Post.to_collection_dict(Post.query, page, per_page, 'api.get_posts')
     return jsonify(data)
 
+
 @bp.route('/posts/<int:id>', methods=['PUT'])
 @token_auth.login_required
 def update_post(id):
     post = Post.query.get_or_404(id)
     data = request.form.to_dict() or {}
+    if request.files:
+        image = request.files["file"]
+        image.save(os.path.join(
+            current_app.config["IMAGE_UPLOADS"], image.filename))
+        post.image_url = image.filename
+    else:
+        post.image_url = ''
+    print(post)
     post.from_dict(data)
     db.session.commit()
     return jsonify(post.to_dict(token_auth.current_user()))
+
 
 @bp.route('/posts', methods=['POST'])
 @token_auth.login_required
 def create_post():
     data = request.form.to_dict() or {}
     if request.files:
-      image = request.files["file"]
-      image.save(os.path.join(current_app.config["IMAGE_UPLOADS"], image.filename)) 
+        image = request.files["file"]
+        image.save(os.path.join(
+            current_app.config["IMAGE_UPLOADS"], image.filename))
     if 'title' not in data or 'body' not in data:
         return bad_request('must include title and body fields')
     post = Post()
