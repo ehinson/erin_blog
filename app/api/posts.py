@@ -32,7 +32,6 @@ def update_post(id):
         post.image_url = image.filename
     else:
         post.image_url = ''
-    print(post)
     post.from_dict(data)
     db.session.commit()
     return jsonify(post.to_dict(token_auth.current_user()))
