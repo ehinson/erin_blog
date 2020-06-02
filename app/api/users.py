@@ -87,13 +87,16 @@ def update_user(id):
         abort(403)
     user = User.query.get_or_404(id)
     data = request.form.to_dict() or {}
-    if request.files:
-        image = request.files["file"] or request.files
+    if request.files and request.files["file"]:
+        image = request.files["file"]
         image.save(os.path.join(
             current_app.config["IMAGE_UPLOADS"], image.filename))
         user.image_url = image.filename
+    elif request.files and request.files["filename"]:
+        user.image_url = request.files["filename"]
     else:
-        user.image_url = ''
+        user.image_url = None
+
     if 'username' in data and data['username'] != user.username and \
             User.query.filter_by(username=data['username']).first():
         return bad_request('please use a different username')
