@@ -1,9 +1,10 @@
 from flask import jsonify, request, url_for, abort
-from app import db
+from app import db, current_app
 from app.models import User
 from app.api import bp
 from app.api.errors import bad_request
 from app.api.auth import token_auth
+import os
 
 
 @bp.route('/users/<int:id>', methods=['GET'])
@@ -54,14 +55,22 @@ def get_followed(id):
 
 @bp.route('/users', methods=['POST'])
 def create_user():
-    data = request.get_json() or {}
+    data = request.form.to_dict() or {}
+    user = User()
+
+    if request.files:
+        image = request.files["file"]
+        image.save(os.path.join(
+            current_app.config["IMAGE_UPLOADS"], image.filename))
+        user.image_url = image.filename
+
     if 'username' not in data or 'email' not in data or 'password' not in data:
         return bad_request('must include username, email and password fields')
     if User.query.filter_by(username=data['username']).first():
         return bad_request('please use a different username')
     if User.query.filter_by(email=data['email']).first():
         return bad_request('please use a different email address')
-    user = User()
+
     user.from_dict(data, new_user=True)
     db.session.add(user)
     db.session.commit()
@@ -77,7 +86,14 @@ def update_user(id):
     if token_auth.current_user().id != id:
         abort(403)
     user = User.query.get_or_404(id)
-    data = request.get_json() or {}
+    data = request.form.to_dict() or {}
+    if request.files:
+        image = request.files["file"] or request.files
+        image.save(os.path.join(
+            current_app.config["IMAGE_UPLOADS"], image.filename))
+        user.image_url = image.filename
+    else:
+        user.image_url = ''
     if 'username' in data and data['username'] != user.username and \
             User.query.filter_by(username=data['username']).first():
         return bad_request('please use a different username')

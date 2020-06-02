@@ -66,6 +66,7 @@ class SearchableMixin(object):
         for obj in cls.query:
             add_to_index(cls.__tablename__, obj)
 
+
 class PaginatedAPIMixin(object):
     @staticmethod
     def to_collection_dict(query, page, per_page, endpoint, **kwargs):
@@ -127,6 +128,7 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
     tasks = db.relationship('Task', backref="user", lazy='dynamic')
     token = db.Column(db.String(32), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
+    image_url = db.Column(db.String(240))
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -136,9 +138,6 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-
-    def avatar(self, size):
-        return 'https://i.pravatar.cc/{}?u={}'.format(size, self.email)
 
     def follow(self, user):
         if not self.is_following(user):
@@ -217,11 +216,11 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
             'post_count': self.posts.count(),
             'follower_count': self.followers.count(),
             'followed_count': self.followed.count(),
+            'image': self.image_url,
             '_links': {
                 'self': url_for('api.get_user', id=self.id),
                 'followers': url_for('api.get_followers', id=self.id),
                 'followed': url_for('api.get_followed', id=self.id),
-                'avatar': self.avatar(128)
             }
         }
 

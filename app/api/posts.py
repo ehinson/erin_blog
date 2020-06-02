@@ -41,15 +41,18 @@ def update_post(id):
 @token_auth.login_required
 def create_post():
     data = request.form.to_dict() or {}
+    post = Post()
+
     if request.files:
         image = request.files["file"]
         image.save(os.path.join(
             current_app.config["IMAGE_UPLOADS"], image.filename))
+        post.image_url = image.filename
+
     if 'title' not in data or 'body' not in data:
         return bad_request('must include title and body fields')
-    post = Post()
+
     post.user_id = token_auth.current_user().id
-    post.image_url = image.filename
     post.from_dict(data)
     db.session.add(post)
     db.session.commit()
